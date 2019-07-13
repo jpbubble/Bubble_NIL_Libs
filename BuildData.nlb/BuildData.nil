@@ -1,0 +1,77 @@
+#use "libs/strings"
+
+table ret
+table copy
+table metaret
+table metacopy
+bool strict = true
+
+
+metacopy.__newindex = void(t,k,v)
+	error("BuildData.Copyright is a read-only array!")
+end
+
+metacopy.__index = string(t,int k)
+	string ty
+	string ay
+	ty = os.date("%Y")
+	ay = sprintf("%s",k)
+	if ty==ay
+		return ay
+	else
+		return sprintf("%s-%s",ay,ty)
+	end
+end
+
+metaret.__newindex = void(t,string k,v)
+	if k:upper()=="STRICT"
+		strict = v
+	end
+	error("Hey, this stuff is read-only! Dummy!")
+end
+
+
+metaret.__index = var(t,string k)
+	switch k:upper()
+		case "FUCK" "SHIT" 
+			return "Profanity!"
+		case "BUILDDATE" "BUBBLEID" "BUBBLEENGINE" "TITLE" "AUTHOR" "LICENSE" "BUILDERVERSION" "MAKEDATE" "RUNMODE"
+			// These are normally always set in a Bubble project, and I don't want them to fall through the strict checker!
+			return BubbleID(k)
+		case "BUILDDATE"
+			return ret.MakeDate
+		case "ENGINE"
+			return ret.BubbleEngine
+		case "BUILDYEAR" "BUILDMONTH" "BUILDDAY"
+			table spd
+			table ldate
+			spd = split(ret.BuildDate," ")
+			assert(#spd>=2,"Invalid builddate value")
+			ldate = split(spd,"/")
+			assert(#spd==3,"Invalid date formation")
+			case k:upper()
+				case "BUILDYEAR"
+					return ldate[3]
+				case "BUILDMONTH"
+					return ldate[1]
+				case "BUILDDAY"
+					return ldate[2]
+			end
+		case "COPYRIGHT"
+			return copy
+		case "STRICT"
+			return strict
+		default
+			string value
+			value = BubbleID(k)
+			if strict
+				assert(value!="",sprintf("Nothing defined on BubbleID.%s",k))
+			end
+			return value
+	end
+end
+
+
+setmetatable(copy,metacopy)
+setmetatable(ret,metaret)
+return ret
