@@ -1,0 +1,26 @@
+#say "DarkText - Translating"
+group Module_DarkText
+	
+	void Text(txt,int x, int y,ah,av)
+		int r
+		int g
+		int b
+		r,g,b = GetColor()
+		Color(0,0,0)
+		for iy=y-1,y+1
+			for ix=x-1,x+1
+				txt.Draw(ix,iy,ah,av)
+			end
+		end
+		Color(r,g,b)
+		txt.Draw(x,y,ah,av)
+	end
+	
+	void Font(font,string text,int x, int y,ah,av)
+		self.Text(font.Text(text),x,y,ah,av)
+	end
+	
+end
+
+return Module_DarkText
+#say "DarkText - Compiling"
