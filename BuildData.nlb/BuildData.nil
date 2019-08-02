@@ -1,6 +1,6 @@
 #use "libs/strings"
 
-table ret
+table retbdata
 table copy
 table metaret
 table metacopy
@@ -49,7 +49,7 @@ metaret.__index = var(t,string k)
 			assert(#spd>=2,"Invalid builddate value")
 			ldate = split(spd,"/")
 			assert(#spd==3,"Invalid date formation")
-			case k:upper()
+			switch k:upper()
 				case "BUILDYEAR"
 					return ldate[3]
 				case "BUILDMONTH"
@@ -73,5 +73,5 @@ end
 
 
 setmetatable(copy,metacopy)
-setmetatable(ret,metaret)
-return ret
+setmetatable(retbdata,metaret)
+return retbdata
